@@ -18,3 +18,4 @@ def get_mask_card_number(number: int) -> str:
 def get_mask_account(number: int) -> str:
     result = "**" + str(number)[-4::]
     return result
+
