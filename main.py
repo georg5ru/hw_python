@@ -31,8 +31,8 @@ def main():
     # Настройки путей по умолчанию
     DEFAULT_PATHS = {
         'JSON': 'transactions.json',
-        'CSV': 'C:\\Users\\pavelk\\Downloads\\transactions.csv',
-        'XLSX': 'C:\\Users\\pavelk\\Downloads\\transactions_excel.xlsx'
+        'CSV': 'C:\\Users\\Pokhlebin.G\\Downloads\\transactions.csv',
+        'XLSX': 'C:\\Users\\Pokhlebin.G\\Downloads\\transactions_excel.xlsx'
     }
 
     # Выбор источника данных
