@@ -61,3 +61,7 @@ def load_transactions(url):
     except Exception as e:
         logger.error(f"Неожиданная ошибка: {str(e)}", exc_info=True)
         return []
+
+## Добавлена возможность просматривания файлов типа csv и excel
+
+были созданы два file_reader для csv и excel 
