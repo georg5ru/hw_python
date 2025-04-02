@@ -1,4 +1,4 @@
-from masks import get_mask_account, get_mask_card_number
+from src.masks import get_mask_account, get_mask_card_number
 
 
 def mask_account_card(card: str) -> str:
@@ -26,5 +26,5 @@ def mask_account_card(card: str) -> str:
 
 def get_date(time: str) -> str:
     time_list = time.split("-")
-    result = f"{time_list[2][:2]}:{time_list[1]}:{time_list[0]}"
+    result = f"{time_list[2][:2]}.{time_list[1]}.{time_list[0]}"
     return result
