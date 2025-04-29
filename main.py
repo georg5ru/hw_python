@@ -30,9 +30,9 @@ def main():
 
     # Настройки путей по умолчанию
     DEFAULT_PATHS = {
-        'JSON': 'transactions.json',
-        'CSV': 'transactions.csv',
-        'XLSX': 'transactions_excel.xlsx'
+        'JSON': 'data/operations.json',
+        'CSV': 'data/transactions.csv',
+        'XLSX': 'data/transactions_excel.xlsx'
     }
 
     # Выбор источника данных

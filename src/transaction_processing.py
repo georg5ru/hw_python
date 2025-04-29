@@ -24,7 +24,7 @@ def count_by_categories(transactions: List[Dict], categories: List[str]) -> Dict
 
 def filter_by_status(transactions: List[Dict], status: str) -> List[Dict]:
     """Фильтрует транзакции по статусу"""
-    return [t for t in transactions if t.get('status', '').upper() == status.upper()]
+    return [t for t in transactions if t.get('state', '').upper() == status.upper()]
 
 def sort_transactions(transactions: List[Dict], reverse: bool = False) -> List[Dict]:
     """Сортирует транзакции по дате"""
@@ -37,4 +37,8 @@ def sort_transactions(transactions: List[Dict], reverse: bool = False) -> List[D
 
 def filter_by_currency(transactions: List[Dict], currency: str = 'RUB') -> List[Dict]:
     """Фильтрует транзакции по валюте"""
-    return [t for t in transactions if t.get('currency', '').upper() == currency.upper()]
+    result = []
+    for i in transactions:
+        if i['operationAmount']['currency']['code'] == currency:
+            result.append(i)
+    return result
