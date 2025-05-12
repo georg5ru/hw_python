@@ -9,14 +9,17 @@ from src.transaction_processing import (
 from typing import List, Dict
 
 
-
 def print_transactions(transactions: List[Dict], limit: int = 5):
     """Печатает список транзакций"""
     for i, t in enumerate(transactions[:limit], 1):
         print(f"\n{i}. {t.get('date', 'Нет даты')} - {t.get('description', 'Нет описания')}")
         print(f"От: {t.get('from', 'Не указано')}")
         print(f"Кому: {t.get('to', 'Не указано')}")
-        print(f"Сумма: {t.get('amount', 'Не указана')} {t.get('currency', '')}")
+        if "operationAmount" in t:
+            print(
+                f"Сумма: {t.get('operationAmount').get('amount')} {t.get('operationAmount').get('currency').get('code')}")
+        else:
+            print(f"Сумма: {t.get('amount', 'Не указана')} {t.get('currency_code', '')}")
 
 
 def get_file_path(default_path: str, file_type: str) -> str:
