@@ -1,16 +1,14 @@
-from external_api import convert_to_rub
+from src.external_api import convert_to_rub
 
 
 def get_amount_in_rub(transaction):
-    """
-    Возвращает сумму транзакции в рублях.
-    """
-    amount = transaction['operationAmount']['amount']
-    currency = transaction['operationAmount']['currency']['code']
+    try:
+        amount = float(transaction["operationAmount"]["amount"])
+        currency = transaction["operationAmount"]["currency"]["code"]
+    except KeyError as e:
+        raise ValueError(f"Missing required field in transaction: {e}")
 
-    # Если валюта уже в рублях, возвращаем сумму
     if currency == "RUB":
-        return float(amount)
+        return amount
 
-    # Конвертируем сумму в рубли
     return convert_to_rub(amount, currency)

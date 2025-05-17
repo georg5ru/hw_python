@@ -1,12 +1,19 @@
 import pandas as pd
 from typing import List, Dict
 
+
 def read_csv_transactions(file_path: str) -> List[Dict]:
     """
-    Считывает финансовые операции из CSV файла.
+    Считывает финансовые операции из CSV файла и возвращает их в виде списка словарей,
+    где каждый словарь представляет собой пары "ключ-значение".
     """
     df = pd.read_csv(file_path)
-    return df.to_dict('records')
+    transactions = []
+    for _, row in df.iterrows():
+        transaction = {key: value for key, value in row.items()}
+        transactions.append(transaction)
+
+    return transactions
 
 
 def read_excel_transactions(file_path: str) -> List[Dict]:
