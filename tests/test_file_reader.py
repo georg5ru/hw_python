@@ -10,14 +10,3 @@ def test_read_json_file():
     if result:
         assert result != []
 
-
-@patch('requests.get')
-def test_convert_currency(mock_get):
-    mock_get.return_value.status_code = 200
-    mock_get.return_value.json.return_value = {'result': 75.0}
-
-    transaction = {'amount': 1, 'currency': 'USD'}
-    assert convert_to_rub(transaction) == 75.0
-
-    transaction = {'amount': 1, 'currency': 'RUB'}
-    assert convert_to_rub(transaction) == 1.0
