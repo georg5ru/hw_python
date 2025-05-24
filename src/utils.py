@@ -1,63 +1,58 @@
 import json
-import requests
 import logging
+from logging import Logger
 from pathlib import Path
+from typing import Any
 
-# Настройка логгера для модуля utils
-logger = logging.getLogger('utils')
-
-# Определяем путь к папке logs в корне проекта
-project_root = Path(__file__).parent.parent  # Поднимаемся на уровень выше src
-log_dir = project_root / "logs"
-log_dir.mkdir(exist_ok=True)  # Создаем папку, если её нет
-
-# Настройка обработчика файла
-file_handler = logging.FileHandler(
-    filename=log_dir / "utils.log",
-    mode='w',
-    encoding='utf-8'
-)
-
-# Форматтер для логов
-formatter = logging.Formatter(
-    '%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    datefmt='%Y-%m-%d %H:%M:%S'
-)
-
-file_handler.setFormatter(formatter)
-logger.addHandler(file_handler)
-logger.setLevel(logging.DEBUG)
-
-url = "https://drive.google.com/file/d/1C0bUdTxUhck-7BoqXSR1wIEp33BH5YXy/view"
+import pandas as pd
 
 
-def load_transactions(url):
-    """Функция для загрузки транзакций по URL"""
+def setup_logging() -> Logger:
+    """
+    Функция, которая настраивает логирование.
+    """
+    logging.basicConfig(
+        level=logging.INFO, format="%(asctime)s - %(module)s - %(levelname)s - %(message)s", encoding="utf-8"
+    )
+    logger = logging.getLogger(__name__)
+    logger.setLevel(logging.INFO)
+
+    file_handler = logging.FileHandler("logs.log", mode="w")
+    file_handler.setLevel(logging.INFO)
+
+    formatter = logging.Formatter("%(asctime)s - %(module)s - %(levelname)s - %(message)s")
+    file_handler.setFormatter(formatter)
+
+    logger.addHandler(file_handler)
+
+    return logger
+
+
+logger = setup_logging()
+
+
+def read_files(file_path: Any) -> Any:
+    """Открытие файла '.xls'"""
+    if Path(file_path).suffix.lower() == ".xls":
+        df = pd.read_excel(file_path)
+        return df.to_dict(orient="records")
+    elif Path(file_path).suffix.lower() == ".json":
+        with open(file_path, "r", encoding="utf-8") as f:
+            return json.load(f)
+    else:
+        print("Неверный формат файла")
+
+
+def write_data(file_: str, results: Any) -> None:
+    """
+    Функция, которая записывает результаты в указанный файл.
+    """
     try:
-        logger.debug(f"Начало загрузки транзакций. URL: {url}")
-
-        response = requests.get(url)
-        logger.debug(f"Получен ответ сервера. Статус: {response.status_code}")
-
-        response.raise_for_status()
-        logger.info("HTTP-запрос выполнен успешно")
-
-        data = response.json()
-        logger.debug(f"Получено данных: {len(data) if isinstance(data, list) else 1}")
-
-        if isinstance(data, list):
-            logger.info(f"Успешно загружено {len(data)} транзакций")
-            return data
+        if file_.endswith(".txt"):
+            with open(file_, "a") as file:
+                file.write(results)
         else:
-            logger.warning("Полученные данные не являются списком")
-            return []
-
-    except requests.RequestException as e:
-        logger.error(f"Ошибка при выполнении запроса: {str(e)}", exc_info=True)
-        return []
-    except json.JSONDecodeError as e:
-        logger.error(f"Ошибка декодирования JSON: {str(e)}", exc_info=True)
-        return []
+            with open(file_, "w", encoding="utf8") as f:
+                json.dump(results, f, indent=4, ensure_ascii=False)
     except Exception as e:
-        logger.error(f"Неожиданная ошибка: {str(e)}", exc_info=True)
-        return []
+        logger.error(f"Ошибка :{e}")
